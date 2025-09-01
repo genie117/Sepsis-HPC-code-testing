@@ -11,6 +11,3 @@ python -c "import transformers; print('Transformers version:', transformers.__ve
 
 # Run the training script
 python clinicalbert_train_with_symptom_dict.py
-
-# Deactivate the environment
-deactivate
