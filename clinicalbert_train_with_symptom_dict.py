@@ -16,11 +16,20 @@ symptom_dictionary = {
     "infection_keywords": ["infection", "pneumonia", "UTI", "bacteremia", "septicemia", "sepsis"]
 }
 
-# Load and label data
-pos = pd.read_csv("clean_pos.csv").assign(label=1)
-neg = pd.read_csv("clean_neg.csv").assign(label=0)
-df = pd.concat([pos, neg]).sample(frac=1).reset_index(drop=True)
-df = df[["text", "label"]].dropna()
+# Load positive (sepsis) notes and assign label 1
+df_pos = pd.read_csv("clean_pos.csv")
+df_pos["label"] = 1
+
+# Load negative (non-sepsis) notes and assign label 0
+df_neg = pd.read_csv("clean_neg.csv")
+df_neg["label"] = 0
+
+# Combine both datasets
+df = pd.concat([df_pos, df_neg], ignore_index=True)
+
+# Keep only the text and label columns, and drop missing values
+df = df[["TEXT", "label"]].dropna()
+
 
 # Tokenize
 tokenizer = BertTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
