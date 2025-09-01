@@ -34,7 +34,7 @@ df = df[["TEXT", "label"]].dropna()
 # Tokenize
 tokenizer = BertTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
 def tokenize_function(example):
-    return tokenizer(example["text"], truncation=True, padding="max_length", max_length=512)
+    return tokenizer(example["TEXT"], truncation=True, padding="max_length", max_length=512)
 
 dataset = Dataset.from_pandas(df)
 tokenized = dataset.map(tokenize_function, batched=True)
