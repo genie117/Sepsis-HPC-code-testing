@@ -106,3 +106,28 @@ plt.close()
 
 print("\nClassification Report:\n")
 print(classification_report(y_true, y_pred))
+
+# === Step 15: Inspect sample predictions ===
+import pandas as pd
+
+# Convert test dataset back into a DataFrame
+df_test = pd.DataFrame(test)  # HuggingFace Dataset -> DataFrame
+df_test["true_label"] = y_true
+df_test["pred_label"] = y_pred
+
+# Map to human-readable labels
+label_map = {0: "Non-Sepsis", 1: "Sepsis"}
+df_test["true_label"] = df_test["true_label"].map(label_map)
+df_test["pred_label"] = df_test["pred_label"].map(label_map)
+
+# Select 5 correct and 5 incorrect samples
+correct = df_test[df_test["true_label"] == df_test["pred_label"]].sample(5, random_state=42)
+incorrect = df_test[df_test["true_label"] != df_test["pred_label"]].sample(5, random_state=42)
+
+# Combine them
+samples = pd.concat([correct, incorrect])
+
+# Save to CSV
+samples.to_csv("sample_predictions.csv", index=False)
+
+print("\n Saved 10 sample predictions (5 correct, 5 incorrect) to 'sample_predictions.csv'")
